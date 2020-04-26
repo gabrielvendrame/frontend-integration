@@ -1,1 +1,9 @@
-<p>post-list works!</p>
+<mat-accordion *ngIf="posts.length > 0" multi=true>
+  <mat-expansion-panel *ngFor="let post of posts">
+    <mat-expansion-panel-header>
+      {{ post.title }}
+    </mat-expansion-panel-header>
+    <p>{{ post.content }}</p>
+  </mat-expansion-panel>
+</mat-accordion>
+<p *ngIf="posts.length <= 0" class=" info-text mat-body-1">Ancora nessun post</p>
