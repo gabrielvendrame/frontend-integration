@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 })
 export class PostsService {
   private posts: Post[] = [];
+  // A Subject is like an Observable, but can multicast to many Observers.
   private postsUpdated = new Subject<Post[]>();
 
   getPosts() {
