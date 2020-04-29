@@ -12,38 +12,47 @@ import { Form } from '@angular/forms';
 export class PostsService {
   private posts: Post[] = [];
   // A Subject is like an Observable, but can multicast to many Observers.
-  private postsUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<{ posts: Post[], totalPosts: number }>();
 
   constructor(private http: HttpClient, private router: Router) {
   }
 
-  getPosts() {
+  getPosts(postsPerPage: number, currentPage: number) {
+    const queyParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+
     // Using spread Operator: I create a new array [], take the value from the input one and place it into the newest
     // Essentially is a copy
     // return [...this.posts];
-    this.http.get<{ message: string, posts: any }>('http://localhost:3000/api/posts')
+    this.http.get<{ message: string, posts: any, totalPosts: number }>('http://localhost:3000/api/posts' + queyParams)
       .pipe(
         map((postData) => {
-          return postData.posts.map(post => {
-            return {
-              title: post.title,
-              content: post.content,
-              id: post._id,
-              imagePath: post.imagePath
-            };
-          });
+          return {
+            posts: postData.posts.map(post => {
+              return {
+                title: post.title,
+                content: post.content,
+                id: post._id,
+                imagePath: post.imagePath
+              };
+            }), totalPosts: postData.totalPosts
+          };
         })
       )
-      .subscribe((transformedPosts) => {
-          this.posts = transformedPosts;
+      .subscribe((transformedPostData) => {
+          this.posts = transformedPostData.posts;
           // Is always better to pass a copy in this way you can't edit the original one
-          this.postsUpdated.next([...this.posts]);
+          this.postsUpdated.next({
+            posts: [...this.posts],
+            totalPosts: transformedPostData.totalPosts
+          });
         }
       );
   }
 
   getPost(id: string) {
-    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>('http://localhost:3000/api/posts/' + id);
+    return this.http
+      .get<{ _id: string, title: string, content: string, imagePath: string }>
+      ('http://localhost:3000/api/posts/' + id);
   }
 
   getPostUpdateListener() {
@@ -56,25 +65,13 @@ export class PostsService {
     postData.append('content', content);
     postData.append('image', image, title);
     this.http.post<{ message: string, post: Post }>('http://localhost:3000/api/posts', postData)
-      .subscribe((responseData) => {
-        const post: Post = {
-          id: responseData.post.id,
-          title,
-          content,
-          imagePath: responseData.post.imagePath
-        };
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]);
+      .subscribe(() => {
+        this.router.navigate(['/']);
       });
-    this.router.navigate(['/']);
   }
 
   deletePost(postId: string) {
-    this.http.delete('http://localhost:3000/api/posts/' + postId)
-      .subscribe(() => {
-        this.posts = this.posts.filter(post => post.id !== postId);
-        this.postsUpdated.next([...this.posts]);
-      });
+    return this.http.delete('http://localhost:3000/api/posts/' + postId);
   }
 
   updatePost(id: string, title: string, content: string, image: File | string) {
@@ -89,13 +86,8 @@ export class PostsService {
       postData = {id, title, content, imagePath: image};
     }
     this.http.put('http://localhost:3000/api/posts/' + id, postData)
-      .subscribe(response => {
-        const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex(singlePost => singlePost.id === id);
-        updatedPosts[oldPostIndex] = {id, title, content, imagePath: ''};
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
+      .subscribe(() => {
+        this.router.navigate(['/']);
       });
-    this.router.navigate(['/']);
   }
 }
