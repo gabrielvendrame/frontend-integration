@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Form } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +31,8 @@ export class PostsService {
                 title: post.title,
                 content: post.content,
                 id: post._id,
-                imagePath: post.imagePath
+                imagePath: post.imagePath,
+                creator: post.creator
               };
             }), totalPosts: postData.totalPosts
           };
@@ -51,7 +51,7 @@ export class PostsService {
 
   getPost(id: string) {
     return this.http
-      .get<{ _id: string, title: string, content: string, imagePath: string }>
+      .get<{ _id: string, title: string, content: string, imagePath: string, creator: string }>
       ('http://localhost:3000/api/posts/' + id);
   }
 
@@ -83,7 +83,7 @@ export class PostsService {
       postData.append('content', content);
       postData.append('image', image, title);
     } else {
-      postData = {id, title, content, imagePath: image};
+      postData = {id, title, content, imagePath: image, creator: null};
     }
     this.http.put('http://localhost:3000/api/posts/' + id, postData)
       .subscribe(() => {
