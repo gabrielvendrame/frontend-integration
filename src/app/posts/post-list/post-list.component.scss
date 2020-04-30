@@ -19,6 +19,8 @@ mat-spinner {
 .post-image img {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   max-height: 400px;
+  max-width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  max-width: stretch;
 }
 
 mat-paginator {
