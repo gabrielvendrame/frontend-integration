@@ -80,6 +80,7 @@ export class CreatePostComponent implements OnInit {
       );
     }
     this.form.reset();
+    this.isLoading = false;
   }
 
   onImagePicked(event: Event) {
