@@ -1,28 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PostsService } from '../../services/posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../../models/post.model';
 import { mimeType } from './mime-type.validator';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-create-post',
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.scss']
 })
-export class CreatePostComponent implements OnInit {
+export class CreatePostComponent implements OnInit, OnDestroy {
 
   private mode = 'create';
   private postId: string;
+  private authStatusSub: Subscription;
   form: FormGroup;
   imagePreview: string;
   post: Post;
   isLoading = false;
 
-  constructor(public postsService: PostsService, public route: ActivatedRoute) {
+  constructor(
+    public postsService: PostsService,
+    public route: ActivatedRoute,
+    private authService: AuthService) {
   }
 
   ngOnInit() {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -92,7 +103,10 @@ export class CreatePostComponent implements OnInit {
       this.imagePreview = reader.result as string;
     };
     reader.readAsDataURL(file);
+  }
 
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 
 }
