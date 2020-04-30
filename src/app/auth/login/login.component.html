@@ -25,10 +25,10 @@
       <mat-error *ngIf="passwordInput.invalid">Please enter a valid Password</mat-error>
 
     </mat-form-field>
-    <button
-      color="accent"
-      mat-raised-button
-      type="submit">Login
+    <button *ngIf="!isLoading"
+            color="accent"
+            mat-raised-button
+            type="submit">Login
     </button>
   </form>
 
