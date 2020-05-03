@@ -1,0 +1,8 @@
+<div class="wrapper">
+  <canvas [height]="150" [width]="1190" #overlayCanvas class="overlayCanvas"></canvas>
+  <canvas [height]="150" [width]="1190" #waveformCanvas class="waveformCanvas"></canvas>
+  <canvas [height]="150" [width]="1190" #cursorCanvas class="cursorCanvas" (mousemove)="onMouseMove($event)" (click)="moveWaveform($event)"></canvas>
+</div>
+<audio id="audio" #audio >
+  <source src="assets/songs-tmp/123.mp3" type="audio/mpeg">
+</audio>

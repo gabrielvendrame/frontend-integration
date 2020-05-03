@@ -13,7 +13,7 @@ import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './errors/error.component';
 import { AuthRoutingModule } from './auth/auth.routing.module';
 import { AngularMaterialModule } from './angular-material.module';
-import { MatVideoModule } from 'mat-video';
+import { MatAudioComponent } from './posts/mat-audio/mat-audio.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { MatVideoModule } from 'mat-video';
     CreatePostComponent,
     HeaderComponent,
     PostListComponent,
-    ErrorComponent
+    ErrorComponent,
+    MatAudioComponent
   ],
   imports: [
     AuthRoutingModule,
@@ -31,7 +32,6 @@ import { MatVideoModule } from 'mat-video';
     BrowserAnimationsModule,
     AngularMaterialModule,
     HttpClientModule,
-    MatVideoModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

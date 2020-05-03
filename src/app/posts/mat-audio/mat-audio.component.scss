@@ -1,0 +1,13 @@
+.wrapper {
+  position: relative;
+}
+
+.waveformCanvas,
+.cursorCanvas,
+.overlayCanvas {
+  position: absolute;
+
+}
+.waveformCanvas {
+  border: 1px solid red;
+}
