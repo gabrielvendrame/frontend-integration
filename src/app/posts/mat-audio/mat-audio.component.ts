@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AudioService } from '../../services/audio.service';
 
 @Component({
   selector: 'app-mat-audio',
@@ -22,7 +23,7 @@ export class MatAudioComponent implements OnInit {
   mouseX: number
   mouseY: number;
 
-  constructor() {
+  constructor(private audioService: AudioService) {
   }
 
   ngOnInit(): void {
