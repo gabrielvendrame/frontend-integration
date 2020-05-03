@@ -24,3 +24,12 @@
 </mat-paginator>
 <p *ngIf="posts.length <= 0 && !isLoading" class=" info-text mat-body-1">Ancora nessun post</p>
 
+
+<!--<mat-video src=></mat-video>-->
+<!--<video title="My Tutorial Title"  autoplay="autoplay" controls>-->
+<!--  <source src="http://localhost:3000/api/video" type="video/mp4">-->
+<!--</video>-->
+
+<mat-video src="http://localhost:3000/api/video" title="Video" [autoplay]="true" [preload]="true" [fullscreen]="true" [download]="false" color="accent" spinner="spin" poster="image.jpg">
+</mat-video>
+

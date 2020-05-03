@@ -13,7 +13,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = 'An Unknown error occurred :(';
+        let errorMessage = 'Could be a wrong server configuration, please contact the administrator or try reloading';
         if (error.error.message) {
           errorMessage = error.error.message;
         }

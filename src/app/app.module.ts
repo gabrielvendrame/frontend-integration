@@ -13,6 +13,7 @@ import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './errors/error.component';
 import { AuthRoutingModule } from './auth/auth.routing.module';
 import { AngularMaterialModule } from './angular-material.module';
+import { MatVideoModule } from 'mat-video';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AngularMaterialModule } from './angular-material.module';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    MatVideoModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
