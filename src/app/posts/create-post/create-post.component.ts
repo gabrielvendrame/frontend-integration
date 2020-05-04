@@ -6,6 +6,9 @@ import { Post } from '../../models/post.model';
 import { mimeType } from './mime-type.validator';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UploadService } from '../../services/upload.service';
+import { UploadDialogComponent } from '../upload-dialog/upload-dialog.component';
 
 @Component({
   selector: 'app-create-post',
@@ -25,7 +28,9 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   constructor(
     public postsService: PostsService,
     public route: ActivatedRoute,
-    private authService: AuthService) {
+    private authService: AuthService,
+    public dialog: MatDialog,
+    public uploadService: UploadService) {
   }
 
   ngOnInit() {
@@ -107,6 +112,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
+  }
+
+  public openUploadDialog() {
+    let dialogRef = this.dialog.open(UploadDialogComponent, {
+      width: '50%',
+      height: '50%'
+    })
   }
 
 }

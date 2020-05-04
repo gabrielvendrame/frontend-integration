@@ -1,14 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { AudioService } from '../../services/audio.service';
 import { StreamState } from '../../interfaces/stream-state';
-import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-mat-audio',
-  templateUrl: './mat-audio.component.html',
-  styleUrls: ['./mat-audio.component.scss']
+  selector: 'app-audio-player',
+  templateUrl: './audio-player.component.html',
+  styleUrls: ['./audio-player.component.scss']
 })
-export class MatAudioComponent {
+export class AudioPlayerComponent {
 
   currentFile: any = {};
   state: StreamState;
@@ -33,7 +32,7 @@ export class MatAudioComponent {
   }
 
   openFile(file, index) {
-    this.currentFile = { index, file };
+    this.currentFile = {index, file};
     this.audioService.stop();
     this.playStream(file.url);
   }

@@ -13,8 +13,11 @@ import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './errors/error.component';
 import { AuthRoutingModule } from './auth/auth.routing.module';
 import { AngularMaterialModule } from './angular-material.module';
-import { MatAudioComponent } from './posts/mat-audio/mat-audio.component';
 import { WaveformComponent } from './posts/waveform/waveform.component';
+import { AudioPlayerComponent } from './posts/audio-player/audio-player.component';
+import { UploadDialogComponent } from './posts/upload-dialog/upload-dialog.component';
+import { UploadService } from './services/upload.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -23,8 +26,9 @@ import { WaveformComponent } from './posts/waveform/waveform.component';
     HeaderComponent,
     PostListComponent,
     ErrorComponent,
-    MatAudioComponent,
-    WaveformComponent
+    AudioPlayerComponent,
+    WaveformComponent,
+    UploadDialogComponent
   ],
   imports: [
     AuthRoutingModule,
@@ -34,19 +38,24 @@ import { WaveformComponent } from './posts/waveform/waveform.component';
     BrowserAnimationsModule,
     AngularMaterialModule,
     HttpClientModule,
+    MatProgressBarModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  },
+  exports: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
       multi: true
-    }],
+    },
+    UploadService
+  ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent]
+  entryComponents: [ErrorComponent, UploadDialogComponent]
 })
 export class AppModule {
 }

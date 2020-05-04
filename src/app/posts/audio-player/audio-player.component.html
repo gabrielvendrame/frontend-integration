@@ -2,11 +2,6 @@
   <mat-icon mat-list-icon>play_circle_filled</mat-icon>
 </button>
 
-
-<!--<audio id="audio" #audio >-->
-<!--  <source src="assets/songs-tmp/123.mp3" type="audio/mpeg">-->
-<!--</audio>-->
-
 <mat-list color="primary">
   <h3 mat-subheader>Songs</h3>
   <mat-list-item *ngFor="let file of files; let i = index" (click)="openFile(file, i)">
@@ -21,4 +16,4 @@
 <mat-slider class="time-slider" min="0" [max]="state?.duration" step="1" [value]="state?.currentTime" (input)="onSliderChangeEnd($event)" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
 
 
-<waveform [audioTime]="state?.currentTime" [totalTime]="state?.duration" (time)="onSliderChangeEnd($event)"></waveform>
+<waveform [disabled]="state?.error || currentFile.index === undefined" [audioTime]="state?.currentTime" [totalTime]="state?.duration" (time)="onSliderChangeEnd($event)"></waveform>

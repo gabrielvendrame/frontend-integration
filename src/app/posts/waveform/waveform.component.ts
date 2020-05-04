@@ -6,44 +6,38 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChang
   styleUrls: ['./waveform.component.scss']
 })
 export class WaveformComponent implements OnInit {
+  @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
   @ViewChild('overlayCanvas', {static: true}) overlayCanvas: ElementRef<HTMLCanvasElement>;
   @ViewChild('waveformCanvas', {static: true}) waveformCanvas: ElementRef<HTMLCanvasElement>;
   @ViewChild('cursorCanvas', {static: true}) cursorCanvas: ElementRef<HTMLCanvasElement>;
 
   @Input() audioTime: number;
   @Input() totalTime: number;
+  @Input() disabled: boolean = true;
+  @Input() waveformElapsedColor: string = '#b0003a';
+  @Input() waveformRemainingColor: string = '#ff6090';
+  @Input() backgroundColor: string = '#fff';
+  @Input() disabledColor: string = '#888888';
   @Output() time: EventEmitter<any> = new EventEmitter();
-  // @ViewChild('audio', {static: false}) audio: ElementRef<HTMLAudioElement>;
 
-  // Input bg-color
-  // Input waveform-color
-  // Input width ?
-  // Input height ? devono essere proporzionali
-  // Input src image and src sound
-
+  width: string = '1190'
+  height: string = '150'
+  waveformContext: any;
   cursorContext: any;
   overlayContext: any;
   mouseX: number
   mouseY: number;
 
   ngOnInit() {
-    let waveformContext = this.waveformCanvas.nativeElement.getContext('2d');
+    this.width = String(this.wrapper.nativeElement.offsetWidth);
+    this.height = String(this.wrapper.nativeElement.offsetHeight);
+
+    this.waveformContext = this.waveformCanvas.nativeElement.getContext('2d');
     this.overlayContext = this.overlayCanvas.nativeElement.getContext('2d');
     this.cursorContext = this.cursorCanvas.nativeElement.getContext('2d');
 
 
-    // Add src from input
-    const image = new Image();
-    image.src = "assets/waveforms-tmp/123.png";
-    image.onload = () => {
-      waveformContext.drawImage(image, 0, 0, this.waveformCanvas.nativeElement.width, this.waveformCanvas.nativeElement.height);
-      waveformContext.globalCompositeOperation = "source-out";
-      waveformContext.fillStyle = "#333";
-      waveformContext.fillRect(0, 0, this.waveformCanvas.nativeElement.width, this.waveformCanvas.nativeElement.height);
-
-      this.overlayContext.fillStyle = "#fff";
-      this.overlayContext.fillRect(0, 0, this.overlayCanvas.nativeElement.width, this.overlayCanvas.nativeElement.height);
-    }
+    this.drawWaveformImage();
   }
 
 
@@ -65,32 +59,29 @@ export class WaveformComponent implements OnInit {
     this.cursorContext.stroke();
   }
 
-  updateWaveform() {
+  updateWaveform(disabledColor?: string) {
     const position = this.cursorCanvas.nativeElement.width * this.audioTime / this.totalTime;
     const width = this.cursorCanvas.nativeElement.width;
     const height = this.cursorCanvas.nativeElement.height;
     this.overlayContext.clearRect(0, 0, width, height);
-    this.overlayContext.fillStyle = "#E92559";
+    this.overlayContext.fillStyle = disabledColor ?? this.waveformElapsedColor
     this.overlayContext.fillRect(0, 0, position, height);
-    this.overlayContext.fillStyle = "#fff";
+    this.overlayContext.fillStyle = disabledColor ?? this.waveformRemainingColor;
     this.overlayContext.fillRect(position, 0, width, height);
     this.overlayContext.beginPath();
     this.overlayContext.moveTo(position, 0);
     this.overlayContext.lineTo(position, height);
     this.overlayContext.strokeStyle = '#000';
     this.overlayContext.stroke();
-
-    // this.audio.nativeElement.currentTime = Math.floor((this.audio.nativeElement.duration * this.mouseX) / this.cursorCanvas.nativeElement.width);
   }
 
   onMouseLeave() {
-
     this.cursorContext.clearRect(0, 0, this.cursorCanvas.nativeElement.width, this.cursorCanvas.nativeElement.height);
   }
 
   onMouseClick(event: any) {
     const mouseX = event.clientX - this.getOffset(this.waveformCanvas.nativeElement).left;
-    let time=Math.floor(Math.floor(this.totalTime) *mouseX/ this.waveformCanvas.nativeElement.width);
+    let time = Math.floor(Math.floor(this.totalTime) * mouseX / this.waveformCanvas.nativeElement.width);
     this.time.emit({
       value: time
     })
@@ -111,7 +102,32 @@ export class WaveformComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.updateWaveform();
+    if (!this.disabled) {
+      this.updateWaveform();
+    } else {
+      this.updateWaveform(this.disabledColor);
+    }
+  }
+
+  drawWaveformImage() {
+    console.log("fatt");
+    this.width = String(this.wrapper.nativeElement.offsetWidth);
+    this.height = String(this.wrapper.nativeElement.offsetHeight);
+    const image = new Image();
+    image.src = "assets/waveforms-tmp/123.png";
+    image.onload = () => {
+      this.waveformContext.clearRect(0, 0, this.width, this.height);
+      this.cursorContext.clearRect(0, 0, this.width, this.height);
+      this.overlayContext.clearRect(0, 0, this.width, this.height);
+      this.waveformContext.drawImage(image, 0, 0, this.width, this.height);
+      this.waveformContext.globalCompositeOperation = "source-out";
+      this.waveformContext.fillStyle = this.backgroundColor;
+      this.waveformContext.fillRect(0, 0, this.width, this.height);
+
+      this.overlayContext.fillStyle = this.waveformRemainingColor
+      this.overlayContext.fillRect(0, 0, this.width, this.height);
+
+    }
   }
 
 }

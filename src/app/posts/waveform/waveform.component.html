@@ -1,5 +1,5 @@
-<div class="wrapper">
-  <canvas [height]="150" [width]="1190" #overlayCanvas class="overlayCanvas"></canvas>
-  <canvas [height]="150" [width]="1190" #waveformCanvas class="waveformCanvas"></canvas>
-  <canvas [height]="150" [width]="1190" #cursorCanvas class="cursorCanvas" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()" (click)="onMouseClick($event)"></canvas>
+<div class="wrapper" #wrapper (window:resize)="drawWaveformImage()">
+  <canvas [height]=height [width]=width #overlayCanvas class="overlayCanvas"></canvas>
+  <canvas [height]=height [width]=width #waveformCanvas class="waveformCanvas"></canvas>
+  <canvas [height]=height [width]=width #cursorCanvas class="cursorCanvas" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()" (click)="onMouseClick($event)"></canvas>
 </div>
