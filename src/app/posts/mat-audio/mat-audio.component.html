@@ -1,8 +1,24 @@
-<div class="wrapper">
-  <canvas [height]="150" [width]="1190" #overlayCanvas class="overlayCanvas"></canvas>
-  <canvas [height]="150" [width]="1190" #waveformCanvas class="waveformCanvas"></canvas>
-  <canvas [height]="150" [width]="1190" #cursorCanvas class="cursorCanvas" (mousemove)="onMouseMove($event)" (click)="moveWaveform($event)"></canvas>
-</div>
-<audio id="audio" #audio >
-  <source src="assets/songs-tmp/123.mp3" type="audio/mpeg">
-</audio>
+<button mat-button (click)="play()" [disabled]="state?.error" *ngIf="!state?.playing">
+  <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+</button>
+
+
+<!--<audio id="audio" #audio >-->
+<!--  <source src="assets/songs-tmp/123.mp3" type="audio/mpeg">-->
+<!--</audio>-->
+
+<mat-list color="primary">
+  <h3 mat-subheader>Songs</h3>
+  <mat-list-item *ngFor="let file of files; let i = index" (click)="openFile(file, i)">
+    <mat-icon color="primary" mat-list-icon>music_note</mat-icon>
+    <h4 mat-line>{{ file.name }}</h4>
+    <h5 mat-line>by {{ file.artist }}</h5>
+    <mat-icon color="primary" *ngIf="currentFile.index === i && !state?.error">volume_up</mat-icon>
+    <h6 *ngIf="currentFile.index === i && state?.error">ERROR</h6>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
+<mat-slider class="time-slider" min="0" [max]="state?.duration" step="1" [value]="state?.currentTime" (input)="onSliderChangeEnd($event)" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
+
+
+<waveform [audioTime]="state?.currentTime" [totalTime]="state?.duration" (time)="onSliderChangeEnd($event)"></waveform>

@@ -57,6 +57,11 @@ export class AudioService {
     });
   }
 
+  getSongs() {
+    return this.http.get<{ message:string, audios: any }>(
+      BACKEND_URL)
+  }
+
   private addEvents(obj, events, handler) {
     events.forEach(event => {
       obj.addEventListener(event, handler);
@@ -73,15 +78,7 @@ export class AudioService {
     return this.streamObservable(url).pipe(takeUntil(this.stop$));
   }
 
-  play(id:string) {
-
-      this.http.get<{ songPath: string, name: string, artist: string }>(
-        BACKEND_URL + id )
-        .subscribe(response => {
-
-        }, error => {
-
-        });
+  play() {
     this.audioObj.play();
   }
 

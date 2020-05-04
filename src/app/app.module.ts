@@ -14,6 +14,7 @@ import { ErrorComponent } from './errors/error.component';
 import { AuthRoutingModule } from './auth/auth.routing.module';
 import { AngularMaterialModule } from './angular-material.module';
 import { MatAudioComponent } from './posts/mat-audio/mat-audio.component';
+import { WaveformComponent } from './posts/waveform/waveform.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MatAudioComponent } from './posts/mat-audio/mat-audio.component';
     HeaderComponent,
     PostListComponent,
     ErrorComponent,
-    MatAudioComponent
+    MatAudioComponent,
+    WaveformComponent
   ],
   imports: [
     AuthRoutingModule,
